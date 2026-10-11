@@ -1,0 +1,104 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  username            String?   @unique
+  passwordHash        String
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime  @default(now())
+}
+
+model HodProfile {
+  id             String   @id @default(uuid())
+  name           String
+  designation    String
+  photoUrl       String
+  mobile         String
+  email          String
+  welcomeMessage String
+  updatedAt      DateTime @default(now()) @updatedAt
+}
+
+model SystemSettings {
+  id                   String    @id @default("default")
+  isScheduledRoundOpen Boolean   @default(false)
+  scheduledStartTime   DateTime?
+  scheduledEndTime     DateTime?
+  updatedAt            DateTime  @default(now()) @updatedAt
+}
+
+model BranchOption {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model FieldOption {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Student {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  phone        String
+  year         String   @default("3rd Year")
+  rollNumber   String?
+  branch       String
+  field        String   @default("Software Developer")
+  registeredAt DateTime @default(now())
+}
+
+model TechnicalAttempt {
+  id            String   @id @default(uuid())
+  studentName   String
+  email         String
+  phone         String
+  year          String
+  rollNumber    String?
+  branch        String
+  field         String
+  score         Int
+  maxScore      Int      @default(10)
+  questionsJson String
+  answersJson   String
+  createdAt     DateTime @default(now())
+}
+
+model ScheduledAttempt {
+  id            String   @id @default(uuid())
+  studentName   String
+  email         String
+  phone         String
+  year          String
+  rollNumber    String?
+  branch        String
+  field         String
+  score         Int
+  maxScore      Int      @default(5)
+  questionsJson String
+  answersJson   String
+  createdAt     DateTime @default(now())
+}
+
+model QuestionHistory {
+  id                String   @id @default(uuid())
+  studentIdentifier String
+  questionText      String
+  servedAt          DateTime @default(now())
+
+  @@index([studentIdentifier])
+}
+
