@@ -30,8 +30,8 @@ function getDatabaseUrl(): string {
       } catch (e) {}
     }
 
-    // On Vercel / AWS Lambda environment, copy database to /tmp for full write/WAL support
-    if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === "production") {
+    // On Vercel / AWS Lambda serverless environment, copy database to /tmp for full write/WAL support
+    if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
       try {
         if (!fs.existsSync("/tmp")) {
           fs.mkdirSync("/tmp", { recursive: true });
